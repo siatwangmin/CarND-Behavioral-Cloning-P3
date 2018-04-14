@@ -79,39 +79,64 @@ In order to gauge how well the model was working, I split my image and steering 
 #### 2. Final Model Architecture
 
 The final model architecture (model.py lines 18-68) consisted of 5 a convolution neural network layers and 5 fully connected layers.Here is a visualization of the architecture 
+
+
 ![alt text][image1]
+
+
 
 [image2]: ./examples/counter-clockwise.jpg "Counter-Clockwise Image"
 [image3]: ./examples/clockwise.jpg "Clockwise Image"
-
-#### 3. Creation of the Training Set & Training Process
-
-To capture good driving behavior, I first recorded two laps on track one using counter-clockwise lane driving. Here is an example image of center lane driving:
-![alt text][image2]
-
-I then recorded the vehicle two laps on track using clockwise lane driving as below:
-![alt text][image3]
-
 [image4]: ./examples/sheared.png "sheared Image"
 [image5]: ./examples/cropped.png "Cropped Image"
 [image6]: ./examples/flipped.png "Flipped Image"
 [image7]: ./examples/resized.png "Resized Image"
 [image8]: ./examples/jungle.jpg "Jungle Image"
 
+#### 3. Creation of the Training Set & Training Process
+
+To capture good driving behavior, I first recorded two laps on track one using counter-clockwise lane driving. Here is an example image of center lane driving:
+
+
+![alt text][image2]
+
+
+I then recorded the vehicle two laps on track using clockwise lane driving as below:
+
+
+![alt text][image3]
+
+
 To augment the data set, I also randomly sheared, randomly croped and randomly flipped images,So I can get endless data. For example, here is an image that has then been sheared:
+
+
 ![alt text][image4]
 
+
+
 the sky and trees are not releate to the lane keeping, to speed up the training, we cropped the image. 35% of the original image from the top and 10% image from the bottom are removed. here is an image that has then been cropped:
+
+
 ![alt text][image5]
 
+
 To make the model not bias to the driving orientation, we flipped the image and the measurement. there are 0.5 probability that a image is flipped. here is an image that has then been flipped:
+
+
 ![alt text][image6]
 
+
 To speed up the training process, smaller data will be a good option, so image is resize into 64×64×3. here is an image that has then been resized:
+
+
 ![alt text][image7]
 
+
 To make the model make self-driving in the jungle lane , I also get training data from the jungle lane and make same augmentation to it, Since I drive slowly in the jungle lane, it can only drive at 15km/h speed. here is an image from jungle:
+
+
 ![alt text][image8]
+
 
 Finally, In each epcho, I get randomly 20032 images data and 6400 images data. I used this training data for training the model. The validation set helped determine if the model was over or under fitting. 
 Finally, we tried epochs  such as 5, 10, 25, 30 and 100. However, **30** works well on both training and validation tracks.
