@@ -16,8 +16,11 @@ The goals of this project are the following:
 
 My project includes the following files:
 * model.py containing the script to create and train the model
+* utils.py containning the script to get training and validation data
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
+* bridge.mp4 is the video showing the performance of my model in the first lane enviroment.
+* Jungle.mp4 is the video showing the performance of my model in the jungle lane enviroment.
 * README.md summarizing the results
 
 #### 2. Submission includes functional code
