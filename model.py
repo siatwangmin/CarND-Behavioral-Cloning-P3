@@ -9,13 +9,14 @@ import matplotlib.pyplot as plt
 
 tf.python.control_flow_ops = tf
 
-number_of_epochs = 30
-number_of_samples_per_epoch = 20032
-number_of_validation_samples = 6400
+epoch_nums = 30
+trainning_nums = 20032
+valid_nums = 6400
 learning_rate = 1e-4
 activation_relu = 'relu'
 
 # The model is based on NVIDIA's "End to End Learning for Self-Driving Cars" paper
+# and Upul's github https://github.com/upul/Behavioral-Cloning
 model = Sequential()
 
 # Normallize the data
@@ -74,11 +75,11 @@ train_gen = utils.generate_next_batch()
 validation_gen = utils.generate_next_batch()
 
 history_object = model.fit_generator(train_gen,
-                              samples_per_epoch=number_of_samples_per_epoch,
-                              nb_epoch=number_of_epochs,
-                              validation_data=validation_gen,
-                              nb_val_samples=number_of_validation_samples,
-                              verbose=1)
+                                     samples_per_epoch=trainning_nums,
+                                     nb_epoch=epoch_nums,
+                                     validation_data=validation_gen,
+                                     nb_val_samples=valid_nums,
+                                     verbose=1)
 # after trainning we save our model and weights
 model.save('model.h5')
 # Finally we plot the loss and validation loss

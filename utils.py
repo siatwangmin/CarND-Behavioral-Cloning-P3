@@ -6,30 +6,30 @@ import pandas as pd
 import scipy.misc
 from scipy.ndimage import rotate
 from scipy.stats import bernoulli
-
+# the utils is based on Upul's github https://github.com/upul/Behavioral-Cloning
 # Some useful constants
-DRIVING_LOG_FILE = '/home/szyh/wangmin/CarND/term-1/data/jungle/driving_log.csv'
+file_path = '/home/szyh/wangmin/CarND/term-1/data/jungle/driving_log.csv'
 #this is the left and right camera's steering coefficent
-STEERING_COEFFICIENT = 0.229
+correction = 0.229
 
 
-def crop(image, top_percent, bottom_percent):
-    assert 0 <= top_percent < 0.5, 'top_percent should be between 0.0 and 0.5'
-    assert 0 <= bottom_percent < 0.5, 'top_percent should be between 0.0 and 0.5'
+def crop(image, up_ratio, down_ratio):
+    assert 0 <= up_ratio < 0.5, 'top_percent should be between 0.0 and 0.5'
+    assert 0 <= down_ratio < 0.5, 'top_percent should be between 0.0 and 0.5'
 
-    top = int(np.ceil(image.shape[0] * top_percent))
-    bottom = image.shape[0] - int(np.ceil(image.shape[0] * bottom_percent))
+    top = int(np.ceil(image.shape[0] * up_ratio))
+    bottom = image.shape[0] - int(np.ceil(image.shape[0] * down_ratio))
 
     return image[top:bottom, :]
 
 
-def resize(image, new_dim):
-    return scipy.misc.imresize(image, new_dim)
+def resize(image, dims):
+    return scipy.misc.imresize(image, dims)
 
 
-def random_flip(image, steering_angle, flipping_prob=0.5):
-    head = bernoulli.rvs(flipping_prob)
-    if head:
+def random_flip(image, steering_angle, flip_prob=0.5):
+    is_flip = bernoulli.rvs(flip_prob)
+    if is_flip:
         return np.fliplr(image), -1 * steering_angle
     else:
         return image, steering_angle
@@ -60,23 +60,23 @@ def random_shear(image, steering_angle, shear_range=200):
 
 
 # generate new image based on the raw image
-def generate_new_image(image, steering_angle, top_crop_percent=0.35, bottom_crop_percent=0.1,
-                       resize_dim=(64, 64), do_shear_prob=0.9):
+def generate_new_image(image, steering_angle, up_crop_ratio=0.35, down_crop_ratio=0.1,
+                       resize_dim=(64, 64), shear_prob=0.9):
     """
     :param image:
     :param steering_angle:
-    :param top_crop_percent:
-    :param bottom_crop_percent:
+    :param up_crop_ratio:
+    :param down_crop_ratio:
     :param resize_dim:
-    :param do_shear_prob:
+    :param shear_prob:
     :param shear_range:
     :return:
     """
-    head = bernoulli.rvs(do_shear_prob)
-    if head == 1:
+    is_shear = bernoulli.rvs(shear_prob)
+    if is_shear == 1:
         image, steering_angle = random_shear(image, steering_angle)
 
-    image = crop(image, top_crop_percent, bottom_crop_percent)
+    image = crop(image, up_crop_ratio, down_crop_ratio)
 
     image, steering_angle = random_flip(image, steering_angle)
 
@@ -95,16 +95,16 @@ def get_next_image_files(batch_size=64):
     :return:
         An list of selected (image files names, respective steering angles)
     """
-    data = pd.read_csv(DRIVING_LOG_FILE)
+    data = pd.read_csv(file_path)
     num_of_img = len(data)
-    rnd_indices = np.random.randint(0, num_of_img, batch_size)
+    indxs = np.random.randint(0, num_of_img, batch_size)
 
     image_files_and_angles = []
-    for index in rnd_indices:
+    for index in indxs:
         rnd_image = np.random.randint(0, 3)
         if rnd_image == 0:
             img = data.iloc[index]['left'].strip()
-            angle = data.iloc[index]['steering'] + STEERING_COEFFICIENT
+            angle = data.iloc[index]['steering'] + correction
             image_files_and_angles.append((img, angle))
 
         elif rnd_image == 1:
@@ -113,7 +113,7 @@ def get_next_image_files(batch_size=64):
             image_files_and_angles.append((img, angle))
         else:
             img = data.iloc[index]['right'].strip()
-            angle = data.iloc[index]['steering'] - STEERING_COEFFICIENT
+            angle = data.iloc[index]['steering'] - correction
             image_files_and_angles.append((img, angle))
 
     return image_files_and_angles
