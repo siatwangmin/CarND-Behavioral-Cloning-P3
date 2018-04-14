@@ -18,7 +18,7 @@ My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
-* README.md summarizing the results**
+* README.md summarizing the results
 
 #### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
@@ -36,7 +36,7 @@ The model.py file contains the code for training and saving the convolution neur
 
 
 ## Steps
-**Here I describe  my implementation of the project. **
+**Here I describe  my implementation of the project.**
 
 ### Model Architecture and Training Strategy
 
@@ -76,7 +76,6 @@ In order to gauge how well the model was working, I split my image and steering 
 #### 2. Final Model Architecture
 
 The final model architecture (model.py lines 18-68) consisted of 5 a convolution neural network layers and 5 fully connected layers.Here is a visualization of the architecture 
-
 ![alt text][image1]
 
 [image2]: ./examples/counter-clockwise.jpg "Counter-Clockwise Image"
@@ -85,11 +84,9 @@ The final model architecture (model.py lines 18-68) consisted of 5 a convolution
 #### 3. Creation of the Training Set & Training Process
 
 To capture good driving behavior, I first recorded two laps on track one using counter-clockwise lane driving. Here is an example image of center lane driving:
-
 ![alt text][image2]
 
 I then recorded the vehicle two laps on track using clockwise lane driving as below:
-
 ![alt text][image3]
 
 [image4]: ./examples/sheared.png "sheared Image"
@@ -106,7 +103,6 @@ the sky and trees are not releate to the lane keeping, to speed up the training,
 
 To make the model not bias to the driving orientation, we flipped the image and the measurement. there are 0.5 probability that a image is flipped. here is an image that has then been flipped:
 ![alt text][image6]
-
 
 To speed up the training process, smaller data will be a good option, so image is resize into 64×64×3. here is an image that has then been resized:
 ![alt text][image7]
